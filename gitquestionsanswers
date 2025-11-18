@@ -1,0 +1,422 @@
+________________________________________
+________________________________________
+1. What is Git and why do we use it?
+Answer:
+Git is a distributed version control system used to track source code changes over time.
+Developers use Git to collaborate, maintain history, create branches safely, and revert mistakes easily.
+Real-time DevOps use case:
+Teams use Git to manage infrastructure-as-code (Terraform, Helm, Kubernetes manifests) where audit history and rollbacks are critical.
+________________________________________
+2. What is a Git repository?
+Answer:
+A repository is a project folder tracked by Git, containing:
+•	.git/ directory (metadata, commits, branches)
+•	tracked files
+•	history
+•	references
+There are two types:
+•	Local Repo → on your machine
+•	Remote Repo → on GitHub, GitLab, Bitbucket
+________________________________________
+3. What is a commit in Git?
+Answer:
+A commit is a snapshot of your code at a specific point.
+Each commit has:
+•	commit ID (SHA)
+•	author
+•	timestamp
+•	message
+•	parent commit
+Production example:
+When fixing an outage, commits help trace exactly when a bug entered the code.
+________________________________________
+4. What is the Git staging area (index)?
+Answer:
+Staging area is a middle layer between working directory and commit.
+Flow:
+Working Directory → Staging Area → Commit
+You select which files you want to include in your commit using:
+git add <file>
+git add .
+Why needed?
+So you can commit only required file changes instead of entire project.
+________________________________________
+5. What is the difference between git add and git commit?
+•	git add → moves changes to staging area
+•	git commit → saves staged changes permanently in Git history
+________________________________________
+6. Explain Git branching.
+Answer:
+Branching allows development of new features in isolation.
+You can create unlimited parallel branches:
+main → production  
+develop → integration  
+feature/xyz → new work  
+hotfix/xyz → bug fixes
+________________________________________
+
+7. What is main branch?
+Answer:
+The production-ready branch.
+Always stable, tested, deployable.
+________________________________________
+8. What is develop branch?
+Answer:
+Integration branch where all feature branches merge before production.
+Used in GitFlow model.
+________________________________________
+9. What is a feature branch?
+Answer:
+A temporary branch for implementing one task or story.
+Example:
+git checkout -b feat-login
+After completion → merged → deleted.
+________________________________________
+10. What is a merge commit?
+Answer:
+A commit created when two branches are merged using:
+git merge <branch>
+It has 2 parent commits.
+________________________________________
+11. What is git merge?
+Answer:
+Merge combines branch histories.
+It does NOT rewrite history.
+Safe for teams.
+________________________________________
+
+12. What is git rebase?
+Answer:
+Rebase rewrites history, placing commits on top of another base commit.
+Gives clean, linear history.
+________________________________________
+13. What is linear history?
+Answer:
+A straight sequence of commits without merge commits.
+Example:
+A → B → C → D
+Clean history = easier debugging + readable logs.
+________________________________________
+14. Difference: Merge vs Rebase
+Merge	Rebase
+Creates merge commit	Rewrites commit history
+Full history visible	Clean history
+Safe for teams	Dangerous if used on shared branches
+________________________________________
+15. What is a fast-forward merge?
+Answer:
+If target branch has no diverging commits, Git simply moves the pointer forward.
+________________________________________
+16. What is a pull request (PR)?
+Answer:
+A request to review and merge code.
+PR includes:
+•	changes
+•	review comments
+•	test results
+•	CI pipelines
+________________________________________
+17. Difference between Git Pull and Git Fetch
+Git Fetch:
+•	Downloads changes
+•	Does NOT merge
+•	Safe for reviewing remote updates
+Git Pull:
+•	Fetch + Merge
+•	Updates your local branch immediately
+________________________________________
+18. What is a detached HEAD?
+Answer:
+When HEAD points to a commit, not a branch.
+Example:
+git checkout <commit-id>
+In this state, new commits are not tied to any branch and can be lost.
+________________________________________
+19. How to recover from detached HEAD?
+Use:
+git switch -c new-branch
+This creates a new branch preserving your work.
+________________________________________
+20. What is .gitignore?
+Answer:
+A file that tells Git which files/folders NOT to track.
+Example:
+node_modules/
+*.log
+.env
+________________________________________
+21. What is Git reset?
+Answer:
+git reset is used to undo commits and move the HEAD pointer.
+Modes:
+•	soft → keep changes staged
+•	mixed → keep changes unstaged
+•	hard → delete changes (dangerous)
+________________________________________
+22. What is Git revert?
+Answer:
+Revert creates a new commit that undoes a previous commit.
+Safe for shared branches.
+________________________________________
+23. Git reset vs revert
+Reset	Revert
+Rewrites history	Safe, adds reverse commit
+Dangerous on shared branches	Used in teams
+Can delete commits	Never deletes commits
+________________________________________
+24. What is Git clone?
+Answer:
+Copies a remote repo to your local machine.
+git clone <url>
+________________________________________
+25. What is origin?
+Answer:
+The default name for a remote Git repository.
+________________________________________
+26. What is HEAD?
+Answer:
+HEAD is a pointer to your current branch or commit.
+________________________________________
+27. What are Git hooks?
+Answer:
+Scripts that run automatically on Git events (commit, push).
+Examples:
+•	pre-commit → lint
+•	pre-push → run tests
+________________________________________
+28. What is Git stash?
+Answer:
+Temporarily stores changes without committing them.
+git stash
+git stash pop
+________________________________________
+29. What is Git cherry-pick?
+Answer:
+Copy a specific commit from one branch to another.
+git cherry-pick <commit-id>
+Useful for urgent bug fixes.
+________________________________________
+30. What is a merge conflict?
+Answer:
+Occurs when two branches change the same lines.
+Fix manually → stage → commit.
+________________________________________
+________________________________________
+31. What is Git Blame? What is it used for?
+Answer:
+git blame shows who changed each line, when they changed it, and in which commit.
+Used for:
+•	debugging production issues
+•	finding the root cause of code regression
+•	identifying who wrote a particular line
+Example:
+git blame app.js
+________________________________________
+32. What is Git Bisect? How does it work?
+Answer:
+git bisect is used to find which commit introduced a bug.
+It performs a binary search between good and bad commits.
+Steps:
+git bisect start
+git bisect bad
+git bisect good <commit-id>
+Git will checkout commits one by one → you test → mark as good or bad → Git finds the exact faulty commit.
+Real DevOps example:
+Used when production bug appears and exact commit is unknown.
+________________________________________
+33. What is a remote in Git?
+Answer:
+A remote is a link to a remote repository like GitHub.
+Example:
+origin -> https://github.com/anil/repo.git
+Commands:
+git remote -v
+git remote add origin <url>
+git remote remove origin
+________________________________________
+34. How does Git store data internally?
+Answer:
+Git uses:
+•	blobs → file content
+•	trees → directory structure
+•	commits → snapshots
+•	references → branch pointers
+•	objects stored in .git/objects
+Git does NOT store file diffs like SVN — it stores snapshots.
+________________________________________
+35. What is the difference between local branch and remote-tracking branch?
+Answer:
+Local branch	Remote-tracking branch
+Exists on your machine	Represents branch on GitHub
+Editable	Read-only
+Example: develop	Example: origin/develop
+Remote tracking branches update when you run:
+git fetch
+________________________________________
+36. What is Git reflog? Why is it important?
+Answer:
+Reflog records every movement of HEAD including resets and rebases.
+You can recover deleted commits using:
+git reflog
+git checkout <lost-commit-id>
+Used for disaster recovery.
+________________________________________
+37. What is the difference between fork and branch?
+Answer:
+•	Branch → inside same repo
+•	Fork → copy of entire repo in your GitHub account
+Fork used in open-source contributions.
+________________________________________
+38. What is a bare repository?
+Answer:
+A repo without working directory — contains only .git data.
+Used on servers like GitHub.
+Create bare repo:
+git init --bare
+________________________________________
+39. What is Git tagging strategy in DevOps pipelines?
+Answer:
+Tags represent releases.
+CI/CD picks tags to deploy:
+Example:
+v1.0.0
+v2.1.3
+Annotated tags:
+git tag -a v1.0 -m "production release"
+________________________________________
+40. What is the difference between annotated and lightweight tags?
+Annotated:
+•	stored as full Git objects
+•	contain metadata (author, message)
+•	used for releases
+Lightweight:
+•	simple pointers
+•	no metadata
+•	used for temporary marking
+________________________________________
+41. How to rename a branch?
+Local:
+git branch -m oldname newname
+Remote:
+git push origin :oldname
+git push origin newname
+________________________________________
+42. What is a submodule?
+Answer:
+Submodule allows embedding one Git repo inside another.
+Used in microservices or shared library repos.
+Command:
+git submodule add <repo-url>
+________________________________________
+43. What is Git LFS (Large File Storage)?
+Answer:
+Git LFS stores large files (videos, datasets) outside Git and keeps pointers in repo.
+Used in ML projects & data-heavy repos.
+________________________________________
+44. Explain Git squash.
+Answer:
+Squash combines multiple commits into one.
+Interactive rebase:
+git rebase -i HEAD~5
+Useful to clean messy commit history before PR merge.
+________________________________________
+45. What is the difference between git clean and git reset --hard?
+git clean:
+•	removes untracked files
+git reset --hard:
+•	resets tracked files to last commit
+•	deletes changes
+Command:
+git clean -fd
+________________________________________
+46. What is Git subtree?
+Answer:
+Advanced way to split/join repositories.
+Example: combining multiple microservices into monorepo.
+Command:
+git subtree add --prefix=serviceA repo-url main
+________________________________________
+47. Explain Git shallow clone.
+Answer:
+Clone with limited history:
+git clone --depth 1 <repo>
+Used in CI/CD to speed up builds.
+________________________________________
+48. What happens internally when you run git push?
+Steps:
+1.	Git checks remote refs
+2.	Validates your commits
+3.	Sends packfile data
+4.	Updates branch pointer on remote
+5.	GitHub updates branch view & triggers CI
+________________________________________
+49. How does Git handle conflicts during rebase?
+1.	Git pauses
+2.	Shows conflict
+3.	You fix manually
+4.	Stage changes
+5.	Continue rebase:
+git rebase --continue
+________________________________________
+50. What is Git worktree?
+Answer:
+Allows multiple working directories for single repo.
+Example:
+git worktree add ../test-branch branch1
+Used to test parallel branches without cloning.
+________________________________________
+51. How to recover deleted branches?
+Use reflog:
+git reflog
+git branch restore <commit-id>
+________________________________________
+52. How to undo the last commit but keep changes?
+git reset --soft HEAD~1
+________________________________________
+53. How to undo last commit AND remove changes?
+git reset --hard HEAD~1
+________________________________________
+54. How to undo a pushed commit safely?
+Use revert:
+git revert <commit-id>
+________________________________________
+55. How do you resolve a merge conflict?
+Steps:
+1.	Open file
+2.	Edit conflict section
+3.	Stage changes
+4.	Commit
+________________________________________
+56. What is the difference between HEAD and ORIG_HEAD?
+•	HEAD → current commit
+•	ORIG_HEAD → commit before a dangerous operation (reset/rebase)
+Used to recover.
+________________________________________
+57. Why is Git preferred in DevOps pipelines?
+Because of:
+•	speed
+•	distributed architecture
+•	branching model
+•	rollbacks
+•	integration with GitHub Actions, Jenkins, GitLab CI, ArgoCD
+________________________________________
+58. What is Git GC (garbage collection)?
+git gc
+Cleans old objects, reduces repo size, optimizes performance.
+________________________________________
+59. What is the difference between Git and SVN?
+Git is distributed; SVN is centralized.
+Git is faster, supports local commits, branching is cheap.
+________________________________________
+60. Explain Git architecture (diagram).
+Working Directory  
+    ↓  
+Staging Area (Index)  
+    ↓  
+Repository (.git)  
+    ↓  
+Remote Repository (GitHub)
+This pipeline is the core of Git operations.
+________________________________________
+
+
